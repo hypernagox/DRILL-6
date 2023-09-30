@@ -1,4 +1,3 @@
-import random
 from pico2d import *
 from collections import deque
 
@@ -72,20 +71,28 @@ class Boy:
 
 def handle_event():
     global boy
+    global mainHand
     for eve in get_events():
         if eve.type == SDL_KEYDOWN:
             if eve.key == SDLK_ESCAPE:
                 return False
         elif eve.type == SDL_MOUSEBUTTONDOWN:
             boy.AddHand(eve.x ,TUK_HEIGHT - eve.y )
+        elif eve.type == SDL_MOUSEMOTION:
+            mainHand.pos[0] = eve.x
+            mainHand.pos[1] = TUK_HEIGHT - eve.y
     return True
 boy = Boy()
-
+mainHand = Hand(0,0)
+hide_cursor()
 while handle_event():
     back_ground.draw(TUK_WIDTH//2,TUK_HEIGHT//2)
     boy.Update()
     boy.Render()
+    mainHand.Render()
     update_canvas()
     boy.CheckArrive()
     clear_canvas()
     delay(0.02)
+
+close_canvas()
